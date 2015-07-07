@@ -22,6 +22,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="init_db.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="wot_scraper.py" />
   </ItemGroup>
   <PropertyGroup>

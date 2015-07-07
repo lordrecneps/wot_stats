@@ -1,7 +1,49 @@
 import urllib.request as web
 import json
 import pprint
+import sqlite3
 
-jcrap = web.urlopen("http://api.worldoftanks.com/wot/tanks/stats/?application_id=ca49fa564ed39d6a5af35af7725beda2&fields=tank_id%2C%20all.damage_dealt&account_id=1000185415")
-jpee = json.loads(jcrap.read().decode())
-pprint.pprint(jpee)
+
+tank_stat_url = 'http://api.worldoftanks.com/wot/tanks/stats/'
+stat_fields = ['tank_id', 'all.battles', 'all.damage_dealt', 'all.frags', 'all.spotted','all.wins']
+
+
+account_id = 1000185415
+queries = {
+    'application_id': 'ca49fa564ed39d6a5af35af7725beda2',
+    'fields': ','.join(stat_fields),
+    'account_id': str(account_id)
+}
+
+stat_url = tank_stat_url + '?' + '&'.join([k + '=' + queries[k] for k in queries])
+
+query_json = web.urlopen(stat_url)
+query_data = json.loads(query_json.read().decode())
+player_data = query_data['data']
+tank_stats = []
+players = []
+
+for p in player_data:
+    players.append(tuple([int(p)]))
+    for tank in player_data[p]:
+        tank_stats.append( tuple([p, tank['tank_id']] + [tank['all'][k] for k in sorted(tank['all'].keys())]) )
+
+conn = sqlite3.connect('wot_stats.db')
+c = conn.cursor()
+
+'''dpg(account_id int, tank_id int, battles int, damage_dealt int, frags int, spotted int, wins int, primary key(account_id, tank_id))'''
+
+# Insert a row of data
+c.executemany("insert or ignore into dpg values (?,?,?,?,?,?,?)", tank_stats)
+c.executemany("insert or ignore into players values (?)", players)
+
+# Save (commit) the changes
+conn.commit()
+
+c.execute("select * from dpg order by account_id")
+for row in c:
+    pprint.pprint(row)
+
+# We can also close the connection if we are done with it.
+# Just be sure any changes have been committed or they will be lost.
+conn.close()
