@@ -10,7 +10,7 @@ tank_stat_url = 'http://api.worldoftanks.com/wot/tanks/stats/'
 stat_fields = ['tank_id', 'all.battles', 'all.damage_dealt', 'all.frags', 'all.spotted','all.wins']
 
 
-start_id = 1000185415
+start_id = 1000200000
 queries = {
     'application_id': 'ca49fa564ed39d6a5af35af7725beda2',
     'fields': ','.join(stat_fields),
@@ -55,7 +55,7 @@ def iterate_tank_data(account_id):
     proc_tank_data(query_json, account_id)
 
 loop = asyncio.get_event_loop()
-f = asyncio.wait([iterate_tank_data(account_id) for account_id in range(start_id, start_id + 1000)])
+f = asyncio.wait([iterate_tank_data(account_id) for account_id in range(start_id, start_id + 100000)])
 loop.run_until_complete(f)
 
 conn = sqlite3.connect('wot_stats.db')
