@@ -1,0 +1,70 @@
+{% extends "master.html" %}
+{% set active_page = "about" %}
+{% block title %}About{% endblock %}
+
+{% block body %}
+		<section>
+			<h2>The dpg whores manifesto</h2>
+			<p>
+				I created dpg whores because WN8 became a farce; tank choice was as much a factor
+				as skill in determining your rating. Since each tank influenced WN8 differently, comparing WN8 was comparing
+				apples and oranges, unless both players played the exact same tanks for the same number
+				of battles.
+			</p>
+			
+			<p>
+				My proposed solution is to keep things simple: go back to looking at hard stats, primarily dpg.
+				I realize there are flaws with this approach, but there is one thing you cannot deny:
+				the best pub players in the game tend to have the highest dpgs.
+			</p>
+			
+			<p>
+				Before noobmeter stopped working properly, it used to have a tank-by-tank ranking that I
+				really liked. There is no bs with this approach. You have a top 50 dpg in a particular
+				tank or you don't; comparisons are really easy to make between players playing the same tank.
+				It may be hard to compare players who play different tanks and that's ok. It's not any
+				different from comparing a goalkeeper to a striker in soccer (please don't take this comparison too seriously);
+				it only makes sense to compare players who play the same tank.
+			</p>
+			
+			<p>
+				For players who aren't in the top 50, I simply display the percentile that the player is at
+				based on both the dpg for that particular tank. If you're in the 90<sup>th</sup> percentile,
+				then your dpg is higher than 90% of the population.
+			</p>
+			
+			<h2>Methodology</h2>
+			<p>
+				dpg whores is really simple. First, I gathered per tank data (dpg, frags, wr, etc.) for every player
+				on the NA server with more than 100 battles. With this data, you automatically get the top players in every tank. For the top 50 
+				dpg list, I only pick players who have 100 and 150 or more battles. For recent dpg, anyone with over 35 battles is included.
+			</p>
+			
+			<p>
+				To create the percentile-based ratings, I created an empirical cdf based on dpg  to estimate the 
+				distribution the data followed. I filtered the data by only using stats from players with more than 50 battles.
+			</p>
+			
+			<p>
+				Most tanks follow a <a href="https://en.wikipedia.org/wiki/Gamma_distribution">gamma distribution</a>, the parameters for which you can estimate using <a href="https://en.wikipedia.org/wiki/Maximum_likelihood">MLE</a>.
+			</p>
+			
+			<p>
+				And that's all there is to it.
+				For tanks with insufficient data due to few players, the percentile based rating isn't particularly reliable.
+			</p>
+			
+			<p>
+				For recent stats, roughly 100 of the most recent battles are counted; if the oldest session can be dropped without the
+				recent battle count dropping below 100, then it is. Any session more than 90 days old is also dropped. These numbers are still subject to change. If you have a well-reasoned opinion on this, let me know!
+			</p>
+			
+			<p>
+				Some things I'm thinking of implementing are graphs of the dpg distribution for each tank.
+				I think a tool for clan recruitment may also be useful, something like the average dpg/winrate percentile
+				for all "important" tanks tier 8 and above, possibly grouped by tank class. If you think you have a good idea,
+				let me know!
+			</p>
+			
+		</section>
+{% endblock %}
