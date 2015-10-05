@@ -171,7 +171,7 @@ def main(c, conn, wakeup=False, proc_fails=False):
 	print(timer() - start_time)
 	return 0
 
-if __name__ == "__main__":
+def main():
 	conn = psycopg2.connect("dbname='{}' user='{}' host='{}' port={} password='{}'".format(
 		environ['DPGWHORES_DBNAME'], environ['POSTGRES_USERNAME'], environ['POSTGRES_HOST'], 
 		environ['POSTGRES_PORT'], environ['POSTGRES_PW']
@@ -218,6 +218,9 @@ if __name__ == "__main__":
 	conn.close()
 	
 	if done:
-		exit(1)
+		return 1
 	else:
-		exit(0)
+		return 0
+
+if __name__ == "__main__":
+	exit(main())

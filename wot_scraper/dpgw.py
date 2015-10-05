@@ -118,7 +118,7 @@ def dw_player_stats():
 		}
 		
 		stat_query = '''
-			select name, tier, battles, dpg, frags, wins, recent_battles, recent_dpg, dpg2.tank_id, recent_wr
+			select name, tier, battles, dpg, frags, wins, recent_battles, recent_dmg, dpg2.tank_id, recent_wins
 			from dpg2 inner join tanks on dpg2.tank_id = tanks.tank_id
 			where battles >= 50 and account_id=%s
 			order by tier desc
@@ -189,8 +189,8 @@ def dw_player_stats():
 				else:
 					rb = sum(row[6])
 					ps_html.append('<td>{}</td>'.format(rb))
-					ps_html.append('<td>{0:.2f}</td>'.format(row[7]))
-					ps_html.append('<td>{0:.2f}</td>'.format(row[9] * 100.0))
+					ps_html.append('<td>{0:.2f}</td>'.format(sum(row[7]) / rb))
+					ps_html.append('<td>{0:.2f}</td>'.format(sum(row[9]) * 100.0 / rb))
 				ps_html.append('</tr>')
 			
 			con_pg.close()

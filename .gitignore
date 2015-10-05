@@ -190,3 +190,4 @@ ModelManifest.xml
 wot_scraper/old/
 *.sql
 *.zip
+wot_scraper/templates/tanks/
