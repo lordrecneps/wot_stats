@@ -191,3 +191,5 @@ wot_scraper/old/
 *.sql
 *.zip
 wot_scraper/templates/tanks/
+wot_scraper/test.py
+wot_scraper/__pycache__/

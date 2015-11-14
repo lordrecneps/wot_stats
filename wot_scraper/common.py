@@ -14,16 +14,26 @@ app_ids = [
 ]
 
 proxy_urls = [
-	'http://proxy-dpgwhores1.rhcloud.com/',
-	'http://proxy-dpgwhores2.rhcloud.com/',
-	'http://proxy-dpgwhores3.rhcloud.com/',
-	'http://proxy-dpgwhores4.rhcloud.com/',
-	'http://proxy-dpgwhores5.rhcloud.com/',
-	'http://proxy-dpgwhores6.rhcloud.com/',
-	'http://proxy-dpgwhores7.rhcloud.com/',
-	'http://proxy-dpgwhores8.rhcloud.com/',
-	'http://proxy-dpgwhores9.rhcloud.com/',
-	'http://proxy-dpgwhores10.rhcloud.com/',
+#	'http://proxy-dpgwhores1.rhcloud.com/',
+#	'http://proxy-dpgwhores2.rhcloud.com/',
+#	'http://proxy-dpgwhores3.rhcloud.com/',
+#	'http://proxy-dpgwhores4.rhcloud.com/',
+#	'http://proxy-dpgwhores5.rhcloud.com/',
+#	'http://proxy-dpgwhores6.rhcloud.com/',
+#	'http://proxy-dpgwhores7.rhcloud.com/',
+#	'http://proxy-dpgwhores8.rhcloud.com/',
+#	'http://proxy-dpgwhores9.rhcloud.com/',
+#	'http://proxy-dpgwhores10.rhcloud.com/',
+	'https://dpgw1.herokuapp.com/',
+	'https://dpgw2.herokuapp.com/',
+	'https://dpgw3.herokuapp.com/',
+	'https://dpgw4.herokuapp.com/',
+	'https://dpgw5.herokuapp.com/',
+	'https://dpgw6.herokuapp.com/',
+	'https://dpgw7.herokuapp.com/',
+	'https://dpgw8.herokuapp.com/',
+	'https://dpgw9.herokuapp.com/',
+	'https://dpgw10.herokuapp.com/',
 ]
 
 sems = [asyncio.Semaphore(10) for _ in app_ids]
