@@ -13,14 +13,16 @@ def main():
 		environ['POSTGRES_PORT'], environ['POSTGRES_PW']
 	))
 	c = conn.cursor()
-
+	
+	start_time = timer()
+	
 	c.execute('drop table if exists top502')
 	c.execute('''
 		create table top502(account_id int, tank_id int, nickname text, tank_name text,
 		battles int, dpg real, fpg real, wr real, rdpg real, rfpg real, rwr real, rb int,
 		primary key(account_id, tank_id))''')
 	conn.commit()
-
+	c.execute('drop table if exists dpg')
 	c.execute('''
 		create table dpg as
 			select * from dpg2
@@ -36,7 +38,6 @@ def main():
 	c.execute('select tank_id, name from tanks where name is not null')
 	tank_ids = c.fetchall()
 
-	start_time = timer()
 	for tid, tname in tank_ids:
 		c.execute(
 		'''(select dpg.account_id, tank_id, (select nickname from players2 where players2.account_id = dpg.account_id), %(n)s, dpg.battles, dpg,
@@ -95,8 +96,10 @@ def main():
 	c.execute('drop table dpg')
 	c.execute('delete from top50')
 	c.execute('insert into top50 (select * from top502)')
+	
 	conn.commit()
 	conn.close()
+	print('Finished compute_tank_data()')
 	print(timer() - start_time)
 	
 if __name__ == "__main__":

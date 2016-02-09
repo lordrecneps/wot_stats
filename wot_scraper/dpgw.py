@@ -4,9 +4,9 @@ import json
 from flask import request
 from flask import Response
 from os import environ
+from dpgwhores import app
 
-app = flask.Flask(__name__)
-
+# Create the application.
 
 @app.route('/')
 def index():
@@ -24,7 +24,7 @@ def dw_main_tank_page():
 		if not page or page.lower() not in valid_pages:
 			return flask.render_template('tanks.html')
 		
-		return flask.render_template('tanks_' + page.lower() + '.html')
+		return flask.render_template('tanks_' + page + '.html')
 	else:
 		return flask.render_template('tanks.html')
 
@@ -41,7 +41,6 @@ def dw_tank_stats(tank_id):
 	else:
 		return flask.render_template('tanks/' + tank_id + '_150.html')
 
-
 def get_closest_pct(c, tid, dpg):
 	c.execute(
 		'''select * from
@@ -53,13 +52,15 @@ def get_closest_pct(c, tid, dpg):
 		order by abs(%(dpg)s-dpg) limit 2''', {'dpg': dpg, 'id': tid}
 	)
 	result = c.fetchall()
-	if result[0]:
+	if result and result[0]:
 		if len(result) == 1:
 			return result[0][1] * 100.0
 		else:
 			t = (dpg - result[0][2]) / (result[1][2] - result[0][2])
 			pct = (1-t)*result[0][1] + t*result[1][1]
 			return round(pct * 100.0, 4)
+	else:
+		return 0.0
 	
 
 @app.route('/api/pct/', methods=['GET'])
@@ -181,6 +182,7 @@ def dw_player_stats():
 				ps_html.append('<td>{0:.2f}</td>'.format(row[5]/row[2] * 100.0))
 					
 				ps_html.append('<td>{0:.2f}</td>'.format(get_closest_pct(c_pg, row[8], row[3])))
+				#ps_html.append('<td>{0:.2f}</td>'.format(0.0))
 				
 				if not row[6]:
 					ps_html.append('<td>0</td>')
@@ -203,7 +205,3 @@ def dw_player_stats():
 			return flask.render_template('players.html', top50_stats = 'Player not found.', player_id=0)
 	else:
 		return flask.render_template('players.html', top50_stats = '', player_id=0)
-
-if __name__ == '__main__':
-	app.debug=True
-	app.run()
