@@ -36,6 +36,19 @@ proxy_urls = [
 	'https://dpgw10.herokuapp.com/',
 ]
 
+player_proxy_urls = [
+	'https://dw11.herokuapp.com/',
+	'https://dw12.herokuapp.com/',
+	'https://dw13.herokuapp.com/',
+	'https://dw14.herokuapp.com/',
+	'https://dw15.herokuapp.com/',
+	'https://dw16.herokuapp.com/',
+	'https://dw17.herokuapp.com/',
+	'https://dw18.herokuapp.com/',
+	'https://dw19.herokuapp.com/',
+	'https://dw20.herokuapp.com/',
+]
+
 sems = [asyncio.Semaphore(10) for _ in app_ids]
 num_apps = len(app_ids)
 

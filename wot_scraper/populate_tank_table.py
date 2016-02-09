@@ -34,7 +34,8 @@ else:
 		result.extend([ tank_data[id][k] for k in stat_fields ])
 		tanks.append( tuple(result) );
 	
-	c.executemany('insert into tanks(tank_id, name, nation, type, tier) values(%s,%s,%s,%s,%s)', tanks)
+	c.executemany('''insert into tanks(tank_id, name, nation, type, tier) values(%s,%s,%s,%s,%s)
+	                 on conflict (tank_id) do update set name = excluded.name, nation = excluded.nation, type = excluded.type, tier = excluded.tier''', tanks)
 	conn.commit()
 	
 conn.close()

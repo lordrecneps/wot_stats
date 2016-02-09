@@ -86,7 +86,7 @@ def proc_tank_data(query_data, account_id, tank_stats, c, conn):
 			if int(result['b']) > 0:
 				tank_stats.append( result )
 
-def main(c, conn, wakeup=False, proc_fails=False):
+def update_loop(c, conn, wakeup=False, proc_fails=False):
 	start_id = 1000000000
 	batch_size = 1000
 
@@ -171,7 +171,7 @@ def main(c, conn, wakeup=False, proc_fails=False):
 	print(timer() - start_time)
 	return 0
 
-def main2():
+def update_dpg():
 	conn = psycopg2.connect("dbname='{}' user='{}' host='{}' port={} password='{}'".format(
 		environ['DPGWHORES_DBNAME'], environ['POSTGRES_USERNAME'], environ['POSTGRES_HOST'], 
 		environ['POSTGRES_PORT'], environ['POSTGRES_PW']
@@ -179,10 +179,10 @@ def main2():
 	c = conn.cursor()
 	
 	print("Waking proxies up")
-	main(c, conn, wakeup=True)
+	update_loop(c, conn, wakeup=True)
 	time.sleep(10)
 	print("Second waking")
-	main(c, conn, wakeup=True)
+	update_loop(c, conn, wakeup=True)
 	time.sleep(5)
 	
 	done = False
@@ -191,7 +191,7 @@ def main2():
 		try:
 			print("Starting main update")
 			conn.commit()
-			main(c, conn)
+			update_loop(c, conn)
 			print("Finished main update")
 			done = True
 			break
@@ -205,7 +205,7 @@ def main2():
 			try:
 				for _ in range(10):
 					conn.commit()
-					if main(c, conn, proc_fails=True) == 1:
+					if update_loop(c, conn, proc_fails=True) == 1:
 						break
 				done = True
 				break
@@ -223,4 +223,4 @@ def main2():
 		return 0
 
 if __name__ == "__main__":
-	exit(main2())
+	exit(update_dpg())
