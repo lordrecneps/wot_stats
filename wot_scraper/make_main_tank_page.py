@@ -6,6 +6,7 @@ def main():
 	page_html = '''
 	{{% extends "master.html" %}}
 	{{% set active_page = "tanks" %}}
+	{{% block title %}}Tanks{{% endblock %}}
 
 	{{% block body %}}
 			<section>
