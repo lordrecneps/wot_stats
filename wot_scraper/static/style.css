@@ -148,6 +148,17 @@ section ul.tank_list li
 	width: 33.333%;*/
 }
 
+section ul#report_list
+{
+	padding-left: 20px;
+}
+
+section textarea#report_msg_textarea
+{
+	width: 100%;
+	height: 250px;
+}
+
 footer
 {
 	position: absolute;

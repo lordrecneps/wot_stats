@@ -205,3 +205,25 @@ def dw_player_stats():
 			return flask.render_template('players.html', top50_stats = 'Player not found.', player_id=0)
 	else:
 		return flask.render_template('players.html', top50_stats = '', player_id=0)
+
+@app.route('/report/', methods=['POST'])
+def dw_report_problem():
+	if request.method == 'POST':
+		try:
+			report_type = request.form['type']
+			report_msg = request.form['msg']
+			
+			con_pg = psycopg2.connect("dbname='{}' user='{}' host='{}' port={} password='{}'".format(
+				environ['DPGWHORES_DBNAME'], environ['POSTGRES_USERNAME'], environ['POSTGRES_HOST'], 
+				environ['POSTGRES_PORT'], environ['POSTGRES_PW']
+			))
+			c_pg = con_pg.cursor()
+			
+			c_pg.execute('''insert into reports(type, msg) values(%s, %s)''', (report_type, report_msg))
+			
+			con_pg.commit()
+			con_pg.close()
+		except:
+			con_pg.close()
+		
+	return flask.render_template('report.html')
