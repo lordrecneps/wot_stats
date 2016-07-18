@@ -166,7 +166,7 @@ def update_loop(wakeup=False, proc_fails=False):
 	print(timer() - start_time)
 
 def update_players():
-	'''print("Waking proxies up")
+	print("Waking proxies up")
 	update_loop(wakeup=True)
 	time.sleep(10)
 	print("Second waking")
@@ -182,7 +182,7 @@ def update_players():
 			done = True
 			break
 		except:
-			print(sys.exc_info(), 'Exception(sys)')'''
+			print(sys.exc_info(), 'Exception(sys)')
 	done = True
 	if done:
 		done = False
