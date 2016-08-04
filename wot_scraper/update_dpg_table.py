@@ -90,13 +90,15 @@ def update_loop(c, conn, wakeup=False, proc_fails=False):
 	start_id = 1000000000
 	batch_size = 1000
 
+	latest_battle_time = int(time.time()) - 604800
+
 	c.execute("select max(account_id) from dpg_done")
 	start_id = c.fetchone()[0]
 
 	if proc_fails:
 		c.execute("select account_id from failed")
 	else:
-		c.execute("select account_id from players2 where account_id > %s", (start_id,))
+		c.execute("select account_id from players2 where account_id > %s and last_battle > %s order by account_id asc", (start_id, latest_battle_time))
 	
 	acc_ids = c.fetchall()
 	if proc_fails:

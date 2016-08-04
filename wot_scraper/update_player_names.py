@@ -25,7 +25,7 @@ def get_player_nicks(ids, app_idx):
   stat_url = tank_stat_url + '?' + '&'.join([k + '=' + queries[k] for k in queries])
   payload = {'a': stat_url}
   response = yield from asyncio.wait_for(aiohttp.post(player_proxy_urls[app_idx], data=payload), 10)
-  #response = yield from aiohttp.get(tank_stat_url, params=queries)
+  #response = yield from asyncio.wait_for(aiohttp.get(tank_stat_url, params=queries), 10)
   return (yield from response.json())
 
 @asyncio.coroutine
@@ -56,10 +56,10 @@ def proc_account_names(id_list, results, idx, c, conn):
       result = {
         'a': int(id),
         'n': res['nickname'],
-        'b': int(r_stats['random']['battles'])
+        'b': int(r_stats['random']['battles']),
+        'l': int(res['last_battle_time'])
       }
-      if result['b'] >= 250:
-        results.append(result)
+      results.append(result)
       
   except Exception as e:
     print(e, 'Exception')
@@ -111,6 +111,7 @@ def update_loop(c, conn, wakeup=False, proc_fails=False):
     
     player_id_num = len(player_ids)
     max_account = player_id_num
+    start_id = 0
 
 
   num_requests = int( ceil(player_id_num / 100) )
@@ -156,11 +157,12 @@ def update_loop(c, conn, wakeup=False, proc_fails=False):
     update_str = ['''
       update players2 set 
         nickname = c.n,
-        battles = c.b
+        battles = c.b,
+        last_battle = c.l
       from (values''']
-    update_vals = ','.join(c.mogrify("(%(a)s,%(n)s,%(b)s)", x).decode('utf-8') for x in acc_names)
+    update_vals = ','.join(c.mogrify("(%(a)s,%(n)s,%(b)s,%(l)s)", x).decode('utf-8') for x in acc_names)
     update_str.append(update_vals)
-    update_str.append(''') as c(a, n, b)
+    update_str.append(''') as c(a, n, b, l)
       where account_id = c.a''')
     c.execute(' '.join(update_str))
     conn.commit()
