@@ -34,7 +34,7 @@ def proc_account_names(id_list, results, idx, c, conn):
   try:
     with (yield from sems[sem_idx]):
       response = yield from get_player_nicks(id_list, sem_idx)
-    
+
     if response['status'] == 'error':
       print('Error response received:', response)
       for account_id in [int(x) for x in id_list.split(',')]:
@@ -45,14 +45,14 @@ def proc_account_names(id_list, results, idx, c, conn):
         )
       conn.commit()
       return
-    
+
     res_data = response['data']
     for id in res_data:
       if not res_data[id]:
         continue
       res = res_data[id]
       r_stats = res['statistics']
-      
+
       result = {
         'a': int(id),
         'n': res['nickname'],
@@ -60,7 +60,7 @@ def proc_account_names(id_list, results, idx, c, conn):
         'l': int(res['last_battle_time'])
       }
       results.append(result)
-      
+
   except Exception as e:
     print(e, 'Exception')
     for account_id in [int(x) for x in id_list.split(',')]:
@@ -90,16 +90,16 @@ def update_loop(c, conn, wakeup=False, proc_fails=False):
 
   if proc_fails:
     start_id = 0
-    
+
     c.execute('select account_id from pfailed')
     player_ids = c.fetchall()
-    
+
     if not player_ids:
       return 1
-    
+
     c.execute('delete from pfailed')
     conn.commit()
-    
+
     player_id_num = len(player_ids)
     max_account = player_id_num
   else:
@@ -108,7 +108,7 @@ def update_loop(c, conn, wakeup=False, proc_fails=False):
 
     if not player_ids:
       return 1
-    
+
     player_id_num = len(player_ids)
     max_account = player_id_num
     start_id = 0
@@ -127,18 +127,18 @@ def update_loop(c, conn, wakeup=False, proc_fails=False):
     end = start_id + (b + 1) * 100 * batch_size
     print('Batch:', b, end='\r')
     id_lists = []
-    
+
     for b_start in range(start, end, 100):
       b_end = b_start + 100
-      
+
       if b_end > max_account:
         b_end = max_account
-      
+
       id_lists.append(','.join( [str(ri[0]) for ri in player_ids[b_start:b_end]] ))
-      
+
       if b_end == max_account:
         break
-    
+
     acc_names = []
     loop = asyncio.get_event_loop()
     f = asyncio.wait([
@@ -148,14 +148,14 @@ def update_loop(c, conn, wakeup=False, proc_fails=False):
     loop.run_until_complete(f)
     print('                             ', end='\r')
     print('loop: ', b, end='\r')
-    
+
     if wakeup:
       c.execute('delete from pfailed')
       conn.commit()
       return 0
-    
+
     update_str = ['''
-      update players2 set 
+      update players2 set
         nickname = c.n,
         battles = c.b,
         last_battle = c.l
@@ -163,7 +163,7 @@ def update_loop(c, conn, wakeup=False, proc_fails=False):
     update_vals = ','.join(c.mogrify("(%(a)s,%(n)s,%(b)s,%(l)s)", x).decode('utf-8') for x in acc_names)
     update_str.append(update_vals)
     update_str.append(''') as c(a, n, b, l)
-      where account_id = c.a''')
+      where account_id = c.a and c.l > last_battle''')
     c.execute(' '.join(update_str))
     conn.commit()
 
@@ -171,7 +171,7 @@ def update_loop(c, conn, wakeup=False, proc_fails=False):
 
 def update_players():
   conn = psycopg2.connect("dbname='{}' user='{}' host='{}' port={} password='{}'".format(
-    environ['DPGWHORES_DBNAME'], environ['POSTGRES_USERNAME'], environ['POSTGRES_HOST'], 
+    environ['DPGWHORES_DBNAME'], environ['POSTGRES_USERNAME'], environ['POSTGRES_HOST'],
     environ['POSTGRES_PORT'], environ['POSTGRES_PW']
   ))
   c = conn.cursor()
@@ -182,9 +182,9 @@ def update_players():
   print("Second waking")
   update_loop(c, conn, wakeup=True)
   time.sleep(5)
-  
+
   done = False
-  
+
   for _ in range(10):
     try:
       print("Starting player update")
@@ -209,10 +209,10 @@ def update_players():
         break
       except:
         print(sys.exc_info(), 'Exception(sys)')
-  
+
   conn.commit()
   conn.close()
-  
+
   if done:
     return 1
   else:
