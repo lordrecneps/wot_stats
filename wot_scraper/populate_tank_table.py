@@ -3,7 +3,8 @@ import json
 import psycopg2
 from os import environ
 
-tank_stat_url = 'http://api.worldoftanks.com/wot/encyclopedia/vehicles/'
+tank_stat_urls = {'na': 'http://api.worldoftanks.com/wot/encyclopedia/vehicles/',
+                  'eu': 'http://api.worldoftanks.eu/wot/encyclopedia/vehicles/'}
 stat_fields = ['name', 'nation', 'type', 'tier']
 
 queries = {
@@ -11,15 +12,16 @@ queries = {
   'fields': ','.join(stat_fields)
 }
 
-stat_url = tank_stat_url + '?' + '&'.join([k + '=' + queries[k] for k in queries])
+def main(server='na'):
+  tank_stat_url = tank_stat_urls[server]
 
-def main():
   conn = psycopg2.connect("dbname='{}' user='{}' host='{}' port={} password='{}'".format(
     environ['DPGWHORES_DBNAME'], environ['POSTGRES_USERNAME'], environ['POSTGRES_HOST'],
     environ['POSTGRES_PORT'], environ['POSTGRES_PW']
   ))
   c = conn.cursor()
 
+  stat_url = tank_stat_url + '?' + '&'.join([k + '=' + queries[k] for k in queries])
   result = json.loads(web.urlopen(stat_url).readall().decode('utf-8'))
 
   tanks = []

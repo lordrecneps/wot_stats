@@ -8,7 +8,9 @@ import time
 import sys
 from common import app_ids, proxy_urls, sems, num_apps
 
-tank_stat_url = 'http://api.worldoftanks.com/wot/tanks/stats/'
+tank_stat_urls = {'na': 'http://api.worldoftanks.com/wot/tanks/stats/',
+                  'eu': 'http://api.worldoftanks.eu/wot/tanks/stats/'}
+tank_stat_url = tank_stat_urls['na']
 stat_fields = ['tank_id', 'random.battles', 'random.damage_dealt', 'random.frags', 'random.wins']
 
 queries = {
@@ -75,14 +77,14 @@ def proc_tank_data(query_data, account_id, tank_stats, c, conn):
 	for id in player_data:
 		if not player_data[id]:
 			break
-		
+
 		for tank in player_data[id]:
 			result = {'a': int(id), 't': int(tank['tank_id'])}
 			result['b'] = int(tank['random']['battles'])
 			result['d'] = int(tank['random']['damage_dealt'])
 			result['f'] = int(tank['random']['frags'])
 			result['w'] = int(tank['random']['wins'])
-			
+
 			if int(result['b']) > 0:
 				tank_stats.append( result )
 
@@ -99,12 +101,12 @@ def update_loop(c, conn, wakeup=False, proc_fails=False):
 		c.execute("select account_id from failed")
 	else:
 		c.execute("select account_id from players2 where account_id > %s and last_battle > %s order by account_id asc", (start_id, latest_battle_time))
-	
+
 	acc_ids = c.fetchall()
 	if proc_fails:
 		if not acc_ids:
 			return 1
-		
+
 		c.execute("delete from failed");
 		conn.commit()
 
@@ -121,25 +123,25 @@ def update_loop(c, conn, wakeup=False, proc_fails=False):
 		print('Batch:', b, end='\r')
 		if end > num_acc_proc:
 			end = num_acc_proc
-		
+
 		tank_stats = []
-		
+
 		loop = asyncio.get_event_loop()
 		f = asyncio.wait([
-			iterate_tank_data( account_id[0], tank_stats, idx, c, conn ) 
+			iterate_tank_data( account_id[0], tank_stats, idx, c, conn )
 			for idx, account_id in enumerate( acc_ids[start:end] )
 		])
 		loop.run_until_complete(f)
 		print('                             ', end='\r')
 		print('loop: ', b, end='\r')
-		
+
 		if wakeup:
 			c.execute('delete from failed')
 			conn.commit()
 			return 0
-		
+
 		if tank_stats:
-			update_str = ['''update dpg2 set 
+			update_str = ['''update dpg2 set
 					battles = c.b, dmg = c.d, frags = c.f, wins = c.w,
 					recent_battles = case when battles < c.b then recent_battles || (c.b - battles) else recent_battles end,
 					recent_dmg = case when battles < c.b then recent_dmg || (c.d - dmg) else recent_dmg end,
@@ -152,7 +154,7 @@ def update_loop(c, conn, wakeup=False, proc_fails=False):
 			update_str.append(update_vals)
 			update_str.append(''') as c(a, t, b, d, f, w)
 				where account_id = c.a and tank_id = c.t''')
-				
+
 			c.execute(' '.join(update_str))
 
 			insert_str = ['''insert into dpg2(
@@ -165,30 +167,33 @@ def update_loop(c, conn, wakeup=False, proc_fails=False):
 					where not exists (select 1 from dpg2 where account_id = c.a and tank_id = c.t))''')
 
 			c.execute(' '.join(insert_str))
-			
+
 		c.execute('insert into dpg_done(account_id) values(%s)', acc_ids[end - 1])
-		
+
 		conn.commit()
 
 	print(timer() - start_time)
 	return 0
 
-def update_dpg():
+def update_dpg(server='na'):
+	global tank_stat_url
+	tank_stat_url = tank_stat_urls[server]
+
 	conn = psycopg2.connect("dbname='{}' user='{}' host='{}' port={} password='{}'".format(
-		environ['DPGWHORES_DBNAME'], environ['POSTGRES_USERNAME'], environ['POSTGRES_HOST'], 
+		environ['DPGWHORES_DBNAME'], environ['POSTGRES_USERNAME'], environ['POSTGRES_HOST'],
 		environ['POSTGRES_PORT'], environ['POSTGRES_PW']
 	))
 	c = conn.cursor()
-	
+
 	print("Waking proxies up")
 	update_loop(c, conn, wakeup=True)
 	time.sleep(10)
 	print("Second waking")
 	update_loop(c, conn, wakeup=True)
 	time.sleep(5)
-	
+
 	done = False
-	
+
 	for _ in range(10):
 		try:
 			print("Starting main update")
@@ -199,7 +204,7 @@ def update_dpg():
 			break
 		except:
 			print(sys.exc_info(), 'Exception(sys)')
-	
+
 	if done:
 		done = False
 		print("Processing fails")
@@ -213,12 +218,12 @@ def update_dpg():
 				break
 			except:
 				print(sys.exc_info(), 'Exception(sys)')
-	
+
 	if done:
 		c.execute('delete from dpg_done where account_id > 1')
 	conn.commit()
 	conn.close()
-	
+
 	if done:
 		return 1
 	else:

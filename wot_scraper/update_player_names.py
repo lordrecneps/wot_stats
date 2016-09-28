@@ -9,7 +9,10 @@ import time
 
 from common import app_ids, player_proxy_urls, sems, num_apps
 
-tank_stat_url = 'http://api.worldoftanks.com/wot/account/info/'
+tank_stat_urls = {'na': 'http://api.worldoftanks.com/wot/account/info/',
+                  'eu': 'http://api.worldoftanks.eu/wot/account/info/'}
+tank_stat_url = tank_stat_urls['na']
+
 stat_fields = ['nickname', 'statistics.random.battles', 'last_battle_time']
 queries = {
   'application_id': 'ca49fa564ed39d6a5af35af7725beda2',
@@ -169,7 +172,10 @@ def update_loop(c, conn, wakeup=False, proc_fails=False):
 
   print(timer() - start_time)
 
-def update_players():
+def update_players(server='na'):
+  global tank_stat_url
+  tank_stat_url = tank_stat_urls[server]
+
   conn = psycopg2.connect("dbname='{}' user='{}' host='{}' port={} password='{}'".format(
     environ['DPGWHORES_DBNAME'], environ['POSTGRES_USERNAME'], environ['POSTGRES_HOST'],
     environ['POSTGRES_PORT'], environ['POSTGRES_PW']

@@ -136,7 +136,7 @@ def update_loop(c, conn, start_point):
 
   print(timer() - start_time)
 
-def update_players(server):
+def update_players(server='na'):
   global tank_stat_url
   global max_account_num
   tank_stat_url = tank_stat_urls[server]
@@ -147,7 +147,7 @@ def update_players(server):
   ))
   c = conn.cursor()
   done = False
-  start_points = {'na': [1000000000], 'eu': [530000000]}
+  start_points = {'na': [1000000000], 'eu': [500000000]}
   start_point = start_points[server]
 
   for _ in range(10):
