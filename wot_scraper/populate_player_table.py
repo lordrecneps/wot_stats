@@ -12,7 +12,13 @@ from common import app_ids, player_proxy_urls, sems, num_apps
 
 lock = threading.Lock()
 
-tank_stat_url = 'http://api.worldoftanks.com/wot/account/info/'
+tank_stat_urls = {'na': 'http://api.worldoftanks.com/wot/account/info/',
+                  'eu': 'http://api.worldoftanks.eu/wot/account/info/'}
+tank_stat_url = tank_stat_urls['na']
+
+max_account_map = {'na': 1023000000, 'eu': 541000000}
+max_account_num = max_account_map['na']
+
 stat_fields = ['nickname', 'statistics.random.battles', 'last_battle_time']
 queries = {
   'application_id': 'ca49fa564ed39d6a5af35af7725beda2',
@@ -64,7 +70,7 @@ def proc_account_names(id_list, results, id_done, idx, c, conn):
   except Exception as e:
     print(e, 'Exception')
   except:
-    print(sys.exc_info(), 'Exception(sys):')
+    print(sys.exc_info(), 'Exception(sys)')
 
 def update_loop(c, conn, start_point):
   start_id = start_point[0]
@@ -72,10 +78,10 @@ def update_loop(c, conn, start_point):
   c.execute('select max(account_id) from players2')
   max_account = c.fetchone()
 
-  if not max_account:
-    max_account = 1023000000
+  if not max_account or not max_account[0]:
+    max_account = max_account_num
   else:
-    max_account = max(max_account[0], 1023000000)
+    max_account = max(max_account[0], max_account_num)
 
   max_account = max_account + 250000
   player_id_num = max_account - start_id
@@ -130,14 +136,19 @@ def update_loop(c, conn, start_point):
 
   print(timer() - start_time)
 
-def update_players():
+def update_players(server):
+  global tank_stat_url
+  global max_account_num
+  tank_stat_url = tank_stat_urls[server]
+  max_account_num = max_account_map[server]
   conn = psycopg2.connect("dbname='{}' user='{}' host='{}' port={} password='{}'".format(
     environ['DPGWHORES_DBNAME'], environ['POSTGRES_USERNAME'], environ['POSTGRES_HOST'],
     environ['POSTGRES_PORT'], environ['POSTGRES_PW']
   ))
   c = conn.cursor()
   done = False
-  start_point = [1000000000]
+  start_points = {'na': [1000000000], 'eu': [530000000]}
+  start_point = start_points[server]
 
   for _ in range(10):
     try:
