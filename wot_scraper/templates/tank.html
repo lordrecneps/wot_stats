@@ -2,42 +2,42 @@
 {% set active_page = "tanks" %}
 
 {% block body %}
-		<script src="{{ url_for('static', filename='tsorter.min.js')}}" type="text/javascript"></script>
-		<script>
-				function table_sort_init() {
-					var top50_sorter = tsorter.create('top50_table');
-				}
-				
-				window.onload = table_sort_init;
-		</script>
-		<section>
-			Version: <a href="./">150 battles DPG</a> |
-			<a href="?v=100">100 battles DPG</a> |
-			<a href="?v=recent">Recent DPG</a> |
-			<a href="?v=150wr">150 battles W/R</a> |
-			<a href="?v=100wr">100 battles W/R</a> |
-			<a href="?v=recentwr">Recent W/R</a>
+    <script src="{{ url_for('static', filename='tsorter.min.js')}}" type="text/javascript"></script>
+    <script>
+        function table_sort_init() {
+          var top50_sorter = tsorter.create('top50_table');
+        }
 
-			<h2>{% block tname %}{% endblock %} Top 50 NA by {% block stat_version %}{% endblock %}</h2>
-			<br />
-			<table id="top50_table">
-				<thead>
-				<tr>
-					<th data-tsorter="numeric">#</th>
-					<th data-tsorter="link">Name</th>
-					<th data-tsorter="numeric">Battles</th>
-					<th data-tsorter="numeric">DPG</th>
-					<th data-tsorter="numeric">FPG</th>
-					<th data-tsorter="numeric">W/R</th>
-					<th data-tsorter="numeric">Recent<br />Battles</th>
-					<th data-tsorter="numeric">Recent<br />DPG</th>
-					<th data-tsorter="numeric">Recent<br />WR</th>
-				</tr>
-				</thead>
-				<tbody>
-				{% block top50_body %}
-				{% endblock %}
-				</tbody>
-			</table>
-		</section>
+        window.onload = table_sort_init;
+    </script>
+    <section>
+      Version: <a href="./&server={{server}}">150 battles DPG</a> |
+      <a href="?v=100&server={{server}}">100 battles DPG</a> |
+      <a href="?v=recent&server={{server}}">Recent DPG</a> |
+      <a href="?v=150wr&server={{server}}">150 battles W/R</a> |
+      <a href="?v=100wr&server={{server}}">100 battles W/R</a> |
+      <a href="?v=recentwr&server={{server}}">Recent W/R</a>
+
+      <h2>{% block tname %}{% endblock %} Top 50 NA by {% block stat_version %}{% endblock %}</h2>
+      <br />
+      <table id="top50_table">
+        <thead>
+        <tr>
+          <th data-tsorter="numeric">#</th>
+          <th data-tsorter="link">Name</th>
+          <th data-tsorter="numeric">Battles</th>
+          <th data-tsorter="numeric">DPG</th>
+          <th data-tsorter="numeric">FPG</th>
+          <th data-tsorter="numeric">W/R</th>
+          <th data-tsorter="numeric">Recent<br />Battles</th>
+          <th data-tsorter="numeric">Recent<br />DPG</th>
+          <th data-tsorter="numeric">Recent<br />WR</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% block top50_body %}
+        {% endblock %}
+        </tbody>
+      </table>
+    </section>
 {% endblock %}

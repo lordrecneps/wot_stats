@@ -1,59 +1,61 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<title>{% block title %}dpgwhores{% endblock %}</title>
-		<meta charset="UTF-8" />
-		
-		<!--[if lt IE 9]>
-		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js">
-		</script>
-		<![endif]-->
-		
-		<link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}" />
-		<link rel="shortcut icon" href="{{ url_for('static', filename='icon.png') }}" />
-	</head>
-	
-	<body>
-		<header>
-			<h1>dpg whores<sub id="beta">BETA</sub></h1>
-			<span id="last_update">Last update: 09 Feb 10:29 EST</span>
-		</header>
-		
-		{% set navigation_bar = [
-			('/', 'index', 'Home'),
-			('/tanks/', 'tanks', 'Tank ranking'),
-			('/players/', 'players', 'Players'),
-			('/about/', 'about', 'About'),
-			('/report/', 'report', 'Report a problem')
-		] -%}
-		{% set active_page = active_page|default('index') -%}
-		
-		<nav>
-			<ul>
-			{% for href, id, caption in navigation_bar %}
-				<li{% if id == active_page %} id="nav_selected"{% endif %}>
-					<a href="{{ href|e }}">{{ caption|e }}</a>
-				</li>
-			{% endfor %}
-			</ul>
-		</nav>
-		
-		{% block body %}{% endblock %}
-		
-		
-		<footer>
-			<div>
-				Spencer McLaughlin // 2015
-				<br /><br /><br />
-				<a id="license_img" rel="license" href="https://creativecommons.org/licenses/by/4.0/" title="Creative Commons Attribution 4.0 International license"><img src="https://licensebuttons.net/l/by/4.0/88x31.png" alt="License"/></a> 
-				
-				Except where otherwise noted, content on this site is licensed under a Creative Commons Attribution 4.0 International license.
+  <head>
+    <title>{% block title %}dpgwhores{% endblock %}</title>
+    <meta charset="UTF-8" />
 
-				<br />
-				<br />
-				Source available on <a href="https://github.com/lordrecneps/wot_stats">GitHub</a>.
-			</div>
-		</footer>
-	</body>
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js">
+    </script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icon.png') }}" />
+  </head>
+
+  {% set server = server|default('na') -%}
+
+  <body>
+    <header>
+      <h1>dpg whores<sub id="beta"><a href="?server=na">NA</a> | EU soon</sub></h1>
+      <span id="last_update">Last update: 30 Sep 22:53 EST</span>
+    </header>
+
+    {% set navigation_bar = [
+      ('/', 'index', 'Home'),
+      ('/tanks/?server=' + server, 'tanks', 'Tank ranking'),
+      ('/players/?server=' + server, 'players', 'Players'),
+      ('/about/', 'about', 'About'),
+      ('/report/', 'report', 'Report a problem')
+    ] -%}
+    {% set active_page = active_page|default('index') -%}
+
+    <nav>
+      <ul>
+      {% for href, id, caption in navigation_bar %}
+        <li{% if id == active_page %} id="nav_selected"{% endif %}>
+          <a href="{{ href|e }}">{{ caption|e }}</a>
+        </li>
+      {% endfor %}
+      </ul>
+    </nav>
+
+    {% block body %}{% endblock %}
+
+
+    <footer>
+      <div>
+        Spencer McLaughlin // 2016
+        <br /><br /><br />
+        <a id="license_img" rel="license" href="https://creativecommons.org/licenses/by/4.0/" title="Creative Commons Attribution 4.0 International license"><img src="https://licensebuttons.net/l/by/4.0/88x31.png" alt="License"/></a>
+
+        Except where otherwise noted, content on this site is licensed under a Creative Commons Attribution 4.0 International license.
+
+        <br />
+        <br />
+        Source available on <a href="https://github.com/lordrecneps/wot_stats">GitHub</a>.
+      </div>
+    </footer>
+  </body>
 </html>

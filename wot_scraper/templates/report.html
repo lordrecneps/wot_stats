@@ -3,36 +3,36 @@
 {% block title %}Report problem{% endblock %}
 
 {% block body %}
-	<section>
-		<h2>Report a problem.</h2>
-		<p>
-			If you have encountered any problems and/or bugs while using this site, please report them below. If
-			you have any feedback, suggestions or feature requests, feel free to let me know.
-			<br /><br />
-			If you have a question, leave your contact details in your comment and I'll get back to you as soon
-			as I can.
-			<br /><br />
-			Before reporting any problems, please make sure your problem isn't listed below:
-			<ul id="report_list">
-				<li>My battle count on the site doesn't match my in-game battle count: My site only tracks random battles; company battles and clan wars aren't counted.</li>
-				<li>I can't find my account on the site: Your account needs 250 random battles before it's tracked.</li>
-			</ul>
-		</p>
-		<p>
-			<form action="." method="post">
-				<h4>Type:</h4>
-				<select name="type">
-					<option value="bug">Bug</option>
-					<option value="suggestion">Suggestion</option>
-					<option value="comments">Comment</option>
-					<option value="question">Question</option>
-					<option value="other">Other</option>
-				</select><br /><br />
-				
-				<h4>Message:</h4>
-				<textarea name="msg" id="report_msg_textarea"></textarea><br /><br />
-				<input type="submit" value="Submit">
-			</form>
-		</p>
-	</section>
+  <section>
+    <h2>Report a problem.</h2>
+    <p>
+      If you have encountered any problems and/or bugs while using this site, please report them below. If
+      you have any feedback, suggestions or feature requests, feel free to let me know.
+      <br /><br />
+      If you have a question, leave your contact details, including the server you're on, in your comment
+      and I'll get back to you as soon as I can.
+      <br /><br />
+      Before reporting any problems, please make sure your problem isn't listed below:
+      <ul id="report_list">
+        <li>My battle count on the site doesn't match my in-game battle count: My site only tracks random battles; company battles and clan wars aren't counted.</li>
+        <li>I can't find my account on the site: Your account needs 250 random battles before it's tracked.</li>
+      </ul>
+    </p>
+    <p>
+      <form action="." method="post">
+        <h4>Type:</h4>
+        <select name="type">
+          <option value="bug">Bug</option>
+          <option value="suggestion">Suggestion</option>
+          <option value="comments">Comment</option>
+          <option value="question">Question</option>
+          <option value="other">Other</option>
+        </select><br /><br />
+
+        <h4>Message:</h4>
+        <textarea name="msg" id="report_msg_textarea"></textarea><br /><br />
+        <input type="submit" value="Submit">
+      </form>
+    </p>
+  </section>
 {% endblock %}

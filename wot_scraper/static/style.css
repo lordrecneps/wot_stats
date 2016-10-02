@@ -1,183 +1,189 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
 
 * {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 p
 {
-	margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 body
 {
-	margin: 0 auto;
-	width: 800px;
-	background: #ffffff;
-	font-family: 'Open Sans',monospace;
-	color: #222222;
-	font-size: 13px;
+  margin: 0 auto;
+  width: 800px;
+  background: #ffffff;
+  font-family: 'Open Sans',monospace;
+  color: #222222;
+  font-size: 13px;
 }
 
 header, footer, aside, nav, section
 {
-	background: #ffffff;
-	margin: 0;
+  background: #ffffff;
+  margin: 0;
 }
 
 header
 {
-	border-bottom: 1px solid black;
-	font-size: 20px;
-	padding: 15px;
-	position: relative;
+  border-bottom: 1px solid black;
+  font-size: 20px;
+  padding: 15px;
+  position: relative;
 }
 
 header span#last_update
 {
-	float: right;
-	display: inline;
-	position: absolute;
-	bottom: 10px;
-	right: 0;
-	font-size: 11px;
+  float: right;
+  display: inline;
+  position: absolute;
+  bottom: 10px;
+  right: 0;
+  font-size: 11px;
 }
 
 #beta
 {
-	font-size: 15px;
+  font-size: 15px;
+}
+
+#beta a
+{
+  text-decoration: none;
+  color: #00f;
 }
 
 nav
 {
-	position: absolute;
-	left: 0;
-	width: 100%;
+  position: absolute;
+  left: 0;
+  width: 100%;
 }
 
 nav ul
 {
-	width: 800px;
-	margin: 0 auto;
-	list-style: none;
+  width: 800px;
+  margin: 0 auto;
+  list-style: none;
 }
 
 nav ul li
 {
-	float: left;
-	margin: 0;
+  float: left;
+  margin: 0;
 }
 
 nav ul li a
 {
-	display: block;
-	line-height: 40px;
-	text-align: center;
-	text-decoration: none;
-	color: #777;
-	padding-left: 20px;
-	padding-right: 20px;
+  display: block;
+  line-height: 40px;
+  text-align: center;
+  text-decoration: none;
+  color: #777;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 nav ul li#nav_selected
 {
-	background: #dddddd;
+  background: #dddddd;
 }
 
 nav ul li:hover
 {
-	background: #dddddd;
+  background: #dddddd;
 }
 
 section
 {
-	padding-top: 20px;
-	padding-bottom: 15px;
-	margin-top: 40px;
+  padding-top: 20px;
+  padding-bottom: 15px;
+  margin-top: 40px;
 }
 
 section table
 {
-	border-collapse: collapse;
-	text-align: center;
-	margin: 0 auto;
-	width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  margin: 0 auto;
+  width: 100%;
 }
 
 section table tr
 {
-	padding: 0;
-	margin: 0;
+  padding: 0;
+  margin: 0;
 }
 
 section table th
 {
-	background: #dddddd;
-	cursor: pointer;
+  background: #dddddd;
+  cursor: pointer;
 }
 
 section table th.descend:after
 {
-	content: " \25B2";
+  content: " \25B2";
 }
 
 section table th.ascend:after
 {
-	content: " \25BC";
+  content: " \25BC";
 }
 
 section table td, section table th
 {
-	border: 1px #aaaaaa solid;
-	padding: 5px;
+  border: 1px #aaaaaa solid;
+  padding: 5px;
 }
 
 section ul.tank_list
 {
-	-webkit-column-count: 3;
-	-moz-column-count: 3;
-	 column-count: 3;
-	 
-	 list-style-type: none;
+  -webkit-column-count: 3;
+  -moz-column-count: 3;
+   column-count: 3;
+
+   list-style-type: none;
 }
 
 section ul.tank_list li
 {
-	/*display: inline-block;
-	width: 33.333%;*/
+  /*display: inline-block;
+  width: 33.333%;*/
 }
 
 section ul#report_list
 {
-	padding-left: 20px;
+  padding-left: 20px;
 }
 
 section textarea#report_msg_textarea
 {
-	width: 100%;
-	height: 250px;
+  width: 100%;
+  height: 250px;
 }
 
 footer
 {
-	position: absolute;
-	left: 0;
-	width: 100%;
-	background: #444444;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background: #444444;
 }
 
 footer div
 {
-	width: 800px;
-	margin: 0 auto;
-	margin-top: 20px;
-	margin-bottom: 20px;
-	color: #eeeeee;
+  width: 800px;
+  margin: 0 auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: #eeeeee;
 }
 
 #license_img
 {
-	float: left;
-	margin-right: 10px;
+  float: left;
+  margin-right: 10px;
 }
