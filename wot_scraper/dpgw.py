@@ -115,9 +115,9 @@ def dw_player_stats():
     if not server:
       server = 'na'
 
-    db_name = 'DPGWHORES_DBNAME'
+    db_name = 'dpgwhores'
     if server == 'eu':
-      db_name = 'DPGWHORESEU_DBNAME'
+      db_name = 'dpgwhoreseu'
 
     if not nickname:
       return flask.render_template('players.html', top50_stats = '', player_id=0, server=server)
@@ -158,7 +158,7 @@ def dw_player_stats():
       query = queries['150']
 
     con_pg = psycopg2.connect("dbname='{}' user='{}' host='{}' port={} password='{}'".format(
-      environ[db_name], environ['POSTGRES_USERNAME'], environ['POSTGRES_HOST'],
+      db_name, environ['POSTGRES_USERNAME'], environ['POSTGRES_HOST'],
       environ['POSTGRES_PORT'], environ['POSTGRES_PW']
     ))
     c_pg = con_pg.cursor()
