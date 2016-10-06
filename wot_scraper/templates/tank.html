@@ -11,14 +11,14 @@
         window.onload = table_sort_init;
     </script>
     <section>
-      Version: <a href="./&server={{server}}">150 battles DPG</a> |
+      Version: <a href="?v=150&server={{server}}">150 battles DPG</a> |
       <a href="?v=100&server={{server}}">100 battles DPG</a> |
       <a href="?v=recent&server={{server}}">Recent DPG</a> |
       <a href="?v=150wr&server={{server}}">150 battles W/R</a> |
       <a href="?v=100wr&server={{server}}">100 battles W/R</a> |
       <a href="?v=recentwr&server={{server}}">Recent W/R</a>
 
-      <h2>{% block tname %}{% endblock %} Top 50 NA by {% block stat_version %}{% endblock %}</h2>
+      <h2>{% block tname %}{% endblock %} Top 50 {% filter upper %}{{server}}{% endfilter %} by {% block stat_version %}{% endblock %}</h2>
       <br />
       <table id="top50_table">
         <thead>
