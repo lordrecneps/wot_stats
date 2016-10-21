@@ -63,7 +63,7 @@ def proc_account_names(id_list, results, id_done, idx, c, conn):
       with lock:
         if result['a'] in id_done:
           continue
-        if result['b'] >= 250:
+        if result['b'] >= 1000:
           results.append(result)
           id_done.add(result['a'])
 
