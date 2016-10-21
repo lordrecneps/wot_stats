@@ -19,7 +19,7 @@ tank_stat_url = tank_stat_urls['na']
 max_account_map = {'na': 1023000000, 'eu': 541000000}
 max_account_num = max_account_map['na']
 
-stat_fields = ['nickname', 'statistics.random.battles', 'last_battle_time']
+stat_fields = ['nickname', 'statistics.random.battles']
 queries = {
   'application_id': 'ca49fa564ed39d6a5af35af7725beda2',
   'fields': ','.join(stat_fields),
@@ -58,7 +58,7 @@ def proc_account_names(id_list, results, id_done, idx, c, conn):
         'a': int(id),
         'n': res['nickname'],
         'b': int(r_stats['random']['battles']),
-        'l': int(res['last_battle_time'])
+        'l': int(time.time())
       }
       with lock:
         if result['a'] in id_done:
