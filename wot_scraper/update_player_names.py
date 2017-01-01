@@ -197,24 +197,21 @@ def update_players(server='na'):
       conn.commit()
       update_loop(c, conn)
       print("Finished player update")
+      break
+    except:
+      print(sys.exc_info(), 'Exception(sys)')
+
+  print("Processing player fails")
+  for _ in range(10):
+    try:
+      for _ in range(20):
+        conn.commit()
+        if update_loop(c, conn, proc_fails=True) == 1:
+          break
       done = True
       break
     except:
       print(sys.exc_info(), 'Exception(sys)')
-  done = True
-  if done:
-    done = False
-    print("Processing player fails")
-    for _ in range(10):
-      try:
-        for _ in range(10):
-          conn.commit()
-          if update_loop(c, conn, proc_fails=True) == 1:
-            break
-        done = True
-        break
-      except:
-        print(sys.exc_info(), 'Exception(sys)')
 
   conn.commit()
   conn.close()
