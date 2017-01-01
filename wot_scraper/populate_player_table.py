@@ -83,7 +83,7 @@ def update_loop(c, conn, start_point):
   else:
     max_account = max(max_account[0], max_account_num)
 
-  max_account = max_account + 250000
+  max_account = max_account + 1000000
   player_id_num = max_account - start_id
 
   num_requests = int( ceil(player_id_num / 100) )
