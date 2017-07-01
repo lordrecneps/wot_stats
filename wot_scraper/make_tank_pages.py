@@ -8,16 +8,13 @@ page_html = '''
 {{% endblock %}}
 
 '''
-
 from os import environ
 import psycopg2
 
+from common import pg_connect
+
 def main(server='na'):
-  conn = psycopg2.connect("dbname='{}' user='{}' host='{}' port={} password='{}'".format(
-    environ['DPGWHORES_DBNAME'], environ['POSTGRES_USERNAME'], environ['POSTGRES_HOST'],
-    environ['POSTGRES_PORT'], environ['POSTGRES_PW']
-  ))
-  c = conn.cursor()
+  conn, c = pg_connect()
 
   c.execute('select distinct tank_id, tank_name from top50')
   valid_tanks = c.fetchall()

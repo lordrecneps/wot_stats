@@ -8,7 +8,7 @@ from timeit import default_timer as timer
 import time
 import threading
 
-from common import app_ids, player_proxy_urls, sems, num_apps
+from common import app_ids, player_proxy_urls, sems, num_apps, pg_connect
 
 lock = threading.Lock()
 
@@ -141,11 +141,7 @@ def update_players(server='na'):
   global max_account_num
   tank_stat_url = tank_stat_urls[server]
   max_account_num = max_account_map[server]
-  conn = psycopg2.connect("dbname='{}' user='{}' host='{}' port={} password='{}'".format(
-    environ['DPGWHORES_DBNAME'], environ['POSTGRES_USERNAME'], environ['POSTGRES_HOST'],
-    environ['POSTGRES_PORT'], environ['POSTGRES_PW']
-  ))
-  c = conn.cursor()
+  conn, c = pg_connect()
   done = False
   start_points = {'na': [1000000000], 'eu': [500000000]}
   start_point = start_points[server]

@@ -7,7 +7,7 @@ import sys
 from timeit import default_timer as timer
 import time
 
-from common import app_ids, player_proxy_urls, sems, num_apps
+from common import app_ids, player_proxy_urls, sems, num_apps, pg_connect
 
 tank_stat_urls = {'na': 'http://api.worldoftanks.com/wot/account/info/',
                   'eu': 'http://api.worldoftanks.eu/wot/account/info/'}
@@ -176,11 +176,7 @@ def update_players(server='na'):
   global tank_stat_url
   tank_stat_url = tank_stat_urls[server]
 
-  conn = psycopg2.connect("dbname='{}' user='{}' host='{}' port={} password='{}'".format(
-    environ['DPGWHORES_DBNAME'], environ['POSTGRES_USERNAME'], environ['POSTGRES_HOST'],
-    environ['POSTGRES_PORT'], environ['POSTGRES_PW']
-  ))
-  c = conn.cursor()
+  conn, c = pg_connect()
 
   print("Waking proxies up")
   update_loop(c, conn, wakeup=True)
